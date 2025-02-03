@@ -1,4 +1,6 @@
-﻿namespace FirstDemo_WebAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FirstDemo_WebAPI.Models
 {
     public class Patient
     {
