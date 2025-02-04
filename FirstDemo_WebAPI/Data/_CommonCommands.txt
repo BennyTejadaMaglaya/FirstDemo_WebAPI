@@ -1,0 +1,2 @@
+﻿Add-Migration -Context MedicalOfficeContext -o Data\MOMigrations Initial
+Update-Database -Context MedicalOfficeContext 

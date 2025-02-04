@@ -33,7 +33,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     MedicalOfficeInitializer.Initialize(serviceProvider: services, DeleteDatabase: true,
-        UseMigrations: false, SeedSampleData: true);
+        UseMigrations: true, SeedSampleData: true);
 }
 
 app.Run();
