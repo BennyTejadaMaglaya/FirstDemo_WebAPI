@@ -25,14 +25,16 @@ namespace FirstDemo_WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
         {
-            return await _context.Patients.ToListAsync();
+            return await _context.Patients.Include(p => p.Doctor).ToListAsync();
         }
 
         // GET: api/Patient/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
+            var patient = await _context.Patients
+                .Include(p => p.Doctor)
+                .FirstOrDefaultAsync(p => p.ID == id);
 
             if (patient == null)
             {
@@ -40,6 +42,14 @@ namespace FirstDemo_WebAPI.Controllers
             }
 
             return patient;
+        }
+
+        // GET: api/PatientsByDoctor
+        [HttpGet("ByDoctor/{id}")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsByDoctor(int id)
+        {
+            return await _context.Patients.Include(e => e.Doctor)
+                .Where(e => e.DoctorID == id).ToListAsync();
         }
 
         // PUT: api/Patient/5
