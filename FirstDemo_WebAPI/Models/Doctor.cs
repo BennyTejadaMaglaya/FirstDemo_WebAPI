@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FirstDemo_WebAPI.Models
 {
@@ -7,6 +8,7 @@ namespace FirstDemo_WebAPI.Models
         public int ID { get; set; }
 
         [Display(Name = "Doctor")]
+        [JsonIgnore]
         public string Summary
         {
             get
@@ -18,6 +20,7 @@ namespace FirstDemo_WebAPI.Models
             }
         }
 
+        [JsonIgnore]
         public string FormalName
         {
             get
@@ -45,6 +48,7 @@ namespace FirstDemo_WebAPI.Models
         [Timestamp]
         public Byte[]? RowVersion { get; set; }
 
+        [JsonIgnore]
         public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
     }
 }
