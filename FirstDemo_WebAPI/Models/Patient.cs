@@ -2,7 +2,7 @@
 
 namespace FirstDemo_WebAPI.Models
 {
-    public class Patient
+    public class Patient : IValidatableObject
     {
         public int ID { get; set; }
 
@@ -55,5 +55,13 @@ namespace FirstDemo_WebAPI.Models
         [Range(1, int.MaxValue, ErrorMessage = "You must select a Doctor as the Primary Care Physician.")]
         public int DoctorID { get; set; }
         public Doctor? Doctor { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (DOB > DateTime.Today.AddDays(1))
+            {
+                yield return new ValidationResult("Date of Birth cannot be in the future.", new[] { "DOB" });
+            }
+        }
     }
 }
