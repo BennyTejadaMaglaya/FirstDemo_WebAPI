@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 namespace FirstDemo_WebAPI.Models
 {
     [ModelMetadataType(typeof(DoctorMetaData))]
-    public class Doctor
+    public class Doctor : Auditable
     {
         public int ID { get; set; }
 
