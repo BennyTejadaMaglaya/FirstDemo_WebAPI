@@ -10,29 +10,6 @@ namespace FirstDemo_WebAPI.Models
     {
         public int ID { get; set; }
 
-        //[JsonIgnore]
-        public string Summary
-        {
-            get
-            {
-                return "Dr. " + FirstName
-                    + (string.IsNullOrEmpty(MiddleName) ? " " :
-                        (" " + (char?)MiddleName[0] + ". ").ToUpper())
-                    + LastName;
-            }
-        }
-
-        //[JsonIgnore]
-        public string FormalName
-        {
-            get
-            {
-                return LastName + ", " + FirstName
-                    + (string.IsNullOrEmpty(MiddleName) ? "" :
-                        (" " + (char?)MiddleName[0] + ".").ToUpper());
-            }
-        }
-
         public string FirstName { get; set; } = "";
 
         public string? MiddleName { get; set; }
@@ -42,6 +19,6 @@ namespace FirstDemo_WebAPI.Models
         public Byte[]? RowVersion { get; set; }
 
         //[JsonIgnore]
-        public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
+        public ICollection<PatientDTO>? Patients { get; set; }
     }
 }

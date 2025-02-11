@@ -9,17 +9,6 @@ namespace FirstDemo_WebAPI.Models
     {
         public int ID { get; set; }
 
-        public string Summary
-        {
-            get
-            {
-                return FirstName
-                    + (string.IsNullOrEmpty(MiddleName) ? " " :
-                        (" " + (char?)MiddleName[0] + ". ").ToUpper())
-                    + LastName;
-            }
-        }
-
         public string FirstName { get; set; } = "";
 
         public string? MiddleName { get; set; }
@@ -35,7 +24,7 @@ namespace FirstDemo_WebAPI.Models
         public Byte[]? RowVersion { get; set; }
 
         public int DoctorID { get; set; }
-        public Doctor? Doctor { get; set; }
+        public DoctorDTO? Doctor { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
