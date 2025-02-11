@@ -4,8 +4,6 @@ namespace FirstDemo_WebAPI.Models
 {
     public class PatientMetaData
     {
-        public int ID { get; set; }
-
         [Display(Name = "Patient ")]
         public string Summary
         {
@@ -54,6 +52,5 @@ namespace FirstDemo_WebAPI.Models
         [Required(ErrorMessage = "You must select the Primary Care Physician.")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a Doctor as the Primary Care Physician.")]
         public int DoctorID { get; set; }
-        public Doctor? Doctor { get; set; }
     }
 }

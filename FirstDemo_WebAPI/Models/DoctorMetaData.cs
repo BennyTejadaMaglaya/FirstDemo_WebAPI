@@ -5,8 +5,6 @@ namespace FirstDemo_WebAPI.Models
 {
     public class DoctorMetaData
     {
-        public int ID { get; set; }
-
         [Display(Name = "Doctor")]
         //[JsonIgnore]
         public string Summary
@@ -17,17 +15,6 @@ namespace FirstDemo_WebAPI.Models
                     + (string.IsNullOrEmpty(MiddleName) ? " " :
                         (" " + (char?)MiddleName[0] + ". ").ToUpper())
                     + LastName;
-            }
-        }
-
-        //[JsonIgnore]
-        public string FormalName
-        {
-            get
-            {
-                return LastName + ", " + FirstName
-                    + (string.IsNullOrEmpty(MiddleName) ? "" :
-                        (" " + (char?)MiddleName[0] + ".").ToUpper());
             }
         }
 
@@ -47,8 +34,5 @@ namespace FirstDemo_WebAPI.Models
 
         [Timestamp]
         public Byte[]? RowVersion { get; set; }
-
-        //[JsonIgnore]
-        public ICollection<Patient> Patients { get; set; } = new HashSet<Patient>();
     }
 }
