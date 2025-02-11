@@ -23,9 +23,53 @@ namespace FirstDemo_WebAPI.Controllers
 
         // GET: api/Patient
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patient>>> GetPatients()
+        public async Task<ActionResult<IEnumerable<PatientDTO>>> GetPatients()
         {
-            return await _context.Patients.Include(p => p.Doctor).ToListAsync();
+            var patientDTOs = await _context.Patients
+                .Include(p => p.Doctor)
+                .Select(p => new PatientDTO
+                {
+                    ID = p.ID,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    OHIP = p.OHIP,
+                    DOB = p.DOB,
+                    ExpYrVisits = p.ExpYrVisits,
+                    RowVersion = p.RowVersion,
+                    DoctorID = p.DoctorID,
+                    Doctor = p.Doctor != null ? new DoctorDTO
+                    {
+                        ID = p.Doctor.ID,
+                        FirstName = p.Doctor.FirstName,
+                        MiddleName = p.Doctor.MiddleName,
+                        LastName = p.Doctor.LastName,
+                        RowVersion = p.Doctor.RowVersion,
+                        Patients = p.Doctor.Patients.Select(pDoctorPatient => new PatientDTO
+                        {
+                            ID = pDoctorPatient.ID,
+                            FirstName = pDoctorPatient.FirstName,
+                            MiddleName = pDoctorPatient.MiddleName,
+                            LastName = pDoctorPatient.LastName,
+                            OHIP = pDoctorPatient.OHIP,
+                            DOB = pDoctorPatient.DOB,
+                            ExpYrVisits = pDoctorPatient.ExpYrVisits,
+                            RowVersion = pDoctorPatient.RowVersion,
+                            DoctorID = pDoctorPatient.DoctorID,
+                            Doctor = pDoctorPatient.Doctor /* Stop recursive mapping */
+                        }).ToList()
+                    } : null
+                })
+                .ToListAsync();
+
+            if (patientDTOs.Count() > 0)
+            {
+                return patientDTOs;
+            }
+            else
+            {
+                return NotFound(new { message = "Error: No Patient records found in the database." });
+            }
         }
 
         // GET: api/Patient/5
