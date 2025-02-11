@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace FirstDemo_WebAPI.Models
 {
-    public class Doctor
+    public class DoctorMetaData
     {
         public int ID { get; set; }
 
