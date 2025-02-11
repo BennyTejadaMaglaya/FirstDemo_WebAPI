@@ -43,21 +43,7 @@ namespace FirstDemo_WebAPI.Controllers
                         ID = p.Doctor.ID,
                         FirstName = p.Doctor.FirstName,
                         MiddleName = p.Doctor.MiddleName,
-                        LastName = p.Doctor.LastName,
-                        RowVersion = p.Doctor.RowVersion,
-                        Patients = p.Doctor.Patients.Select(pDoctorPatient => new PatientDTO
-                        {
-                            ID = pDoctorPatient.ID,
-                            FirstName = pDoctorPatient.FirstName,
-                            MiddleName = pDoctorPatient.MiddleName,
-                            LastName = pDoctorPatient.LastName,
-                            OHIP = pDoctorPatient.OHIP,
-                            DOB = pDoctorPatient.DOB,
-                            ExpYrVisits = pDoctorPatient.ExpYrVisits,
-                            RowVersion = pDoctorPatient.RowVersion,
-                            DoctorID = pDoctorPatient.DoctorID,
-                            Doctor = pDoctorPatient.Doctor /* Stop recursive mapping */
-                        }).ToList()
+                        LastName = p.Doctor.LastName
                     } : null
                 })
                 .ToListAsync();
