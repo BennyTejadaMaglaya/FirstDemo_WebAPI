@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FirstDemo_WebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -8,7 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MedicalOfficeContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MedicalOfficeContext")));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.DefaultIgnoreCondition
+            = JsonIgnoreCondition.WhenWritingDefault;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -60,26 +60,75 @@ namespace FirstDemo_WebAPI.Controllers
 
         // GET: api/Patient/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Patient>> GetPatient(int id)
+        public async Task<ActionResult<PatientDTO>> GetPatient(int id)
         {
-            var patient = await _context.Patients
-                .Include(p => p.Doctor)
+            var patientDTO = await _context.Patients
+                .Include(e => e.Doctor)
+                .Select(p => new PatientDTO
+                {
+                    ID = p.ID,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    OHIP = p.OHIP,
+                    DOB = p.DOB,
+                    ExpYrVisits = p.ExpYrVisits,
+                    RowVersion = p.RowVersion,
+                    DoctorID = p.DoctorID,
+                    Doctor = p.Doctor != null ? new DoctorDTO
+                    {
+                        ID = p.Doctor.ID,
+                        FirstName = p.Doctor.FirstName,
+                        MiddleName = p.Doctor.MiddleName,
+                        LastName = p.Doctor.LastName
+                    } : null
+                })
                 .FirstOrDefaultAsync(p => p.ID == id);
 
-            if (patient == null)
+            if (patientDTO == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Error: That Patient was not found in the database." });
             }
 
-            return patient;
+            return patientDTO;
         }
 
         // GET: api/PatientsByDoctor
         [HttpGet("ByDoctor/{id}")]
-        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsByDoctor(int id)
+        public async Task<ActionResult<IEnumerable<PatientDTO>>> GetPatientsByDoctor(int id)
         {
-            return await _context.Patients.Include(e => e.Doctor)
-                .Where(e => e.DoctorID == id).ToListAsync();
+            var patientDTOs = await _context.Patients
+                .Include(e => e.Doctor)
+                .Where(e => e.DoctorID == id)
+                .Select(p => new PatientDTO
+                {
+                    ID = p.ID,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    OHIP = p.OHIP,
+                    DOB = p.DOB,
+                    ExpYrVisits = p.ExpYrVisits,
+                    RowVersion = p.RowVersion,
+                    DoctorID = p.DoctorID,
+                    Doctor = p.Doctor != null ? new DoctorDTO
+                    {
+                        ID = p.Doctor.ID,
+                        FirstName = p.Doctor.FirstName,
+                        MiddleName = p.Doctor.MiddleName,
+                        LastName = p.Doctor.LastName
+                    } : null
+                })
+                .ToListAsync();
+
+            if (patientDTOs.Count() > 0)
+            {
+                return patientDTOs;
+            }
+            else
+            {
+                return NotFound(new { message = "Error: No Patients for the specified Doctor." });
+            }
         }
 
         // PUT: api/Patient/5
