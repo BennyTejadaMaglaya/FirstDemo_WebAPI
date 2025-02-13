@@ -23,81 +23,120 @@ namespace FirstDemo_WebAPI.Controllers
 
         // GET: api/Doctor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctors()
         {
-            return await _context.Doctors.ToListAsync();
+            var doctorDTOs = await _context.Doctors
+                .Select(d => new DoctorDTO
+                {
+                    ID = d.ID,
+                    FirstName = d.FirstName,
+                    MiddleName = d.MiddleName,
+                    LastName = d.LastName,
+                    RowVersion = d.RowVersion
+                })
+                .ToListAsync();
+
+            if (doctorDTOs.Count() > 0)
+            {
+                return doctorDTOs;
+            }
+            else
+            {
+                return NotFound(new { message = "Error: No Doctor records found in the database." });
+            }
         }
+
+        // GET: api/Doctor/inc - Include the Patients Collection
+        [HttpGet("inc")]
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctorsInc()
+        {
+            var doctorDTOs = await _context.Doctors
+                .Include(d => d.Patients)
+                .Select(d => new DoctorDTO
+                {
+                    ID = d.ID,
+                    FirstName = d.FirstName,
+                    MiddleName = d.MiddleName,
+                    LastName = d.LastName,
+                    RowVersion = d.RowVersion,
+                    Patients = d.Patients.Select(dPatient => new PatientDTO
+                    {
+                        ID = dPatient.ID,
+                        FirstName = dPatient.FirstName,
+                        MiddleName = dPatient.MiddleName,
+                        LastName = dPatient.LastName,
+                        OHIP = dPatient.OHIP,
+                        DOB = dPatient.DOB,
+                        ExpYrVisits = dPatient.ExpYrVisits
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            if (doctorDTOs.Count() > 0)
+            {
+                return doctorDTOs;
+            }
+            else
+            {
+                return NotFound(new { message = "Error: No Doctor records found in the database." });
+            }
+        }
+
 
         // GET: api/Doctor/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Doctor>> GetDoctor(int id)
+        public async Task<ActionResult<DoctorDTO>> GetDoctor(int id)
         {
-            var doctor = await _context.Doctors.FindAsync(id);
-
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-
-            return doctor;
-        }
-
-        // PUT: api/Doctor/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(int id, Doctor doctor)
-        {
-            if (id != doctor.ID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(doctor).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DoctorExists(id))
+            var doctorDTO = await _context.Doctors
+                .Select(d => new DoctorDTO
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                    ID = d.ID,
+                    FirstName = d.FirstName,
+                    MiddleName = d.MiddleName,
+                    LastName = d.LastName,
+                    RowVersion = d.RowVersion
+                })
+                .FirstOrDefaultAsync(d => d.ID == id);
 
-            return NoContent();
-        }
-
-        // POST: api/Doctor
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Doctor>> PostDoctor(Doctor doctor)
-        {
-            _context.Doctors.Add(doctor);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDoctor", new { id = doctor.ID }, doctor);
-        }
-
-        // DELETE: api/Doctor/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoctor(int id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            if (doctorDTO == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Error: That Doctor was not found in the database." });
             }
 
-            _context.Doctors.Remove(doctor);
-            await _context.SaveChangesAsync();
+            return doctorDTO;
+        }
 
-            return NoContent();
+        // GET: api/Doctor/inc/5
+        [HttpGet("inc/{id}")]
+        public async Task<ActionResult<DoctorDTO>> GetDoctorInc(int id)
+        {
+            var doctorDTO = await _context.Doctors
+                .Select(d => new DoctorDTO
+                {
+                    ID = d.ID,
+                    FirstName = d.FirstName,
+                    MiddleName = d.MiddleName,
+                    LastName = d.LastName,
+                    RowVersion = d.RowVersion,
+                    Patients = d.Patients.Select(dPatient => new PatientDTO
+                    {
+                        ID = dPatient.ID,
+                        FirstName = dPatient.FirstName,
+                        MiddleName = dPatient.MiddleName,
+                        LastName = dPatient.LastName,
+                        OHIP = dPatient.OHIP,
+                        DOB = dPatient.DOB,
+                        ExpYrVisits = dPatient.ExpYrVisits
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync(d => d.ID == id);
+
+            if (doctorDTO == null)
+            {
+                return NotFound(new { message = "Error: That Doctor was not found in the database." });
+            }
+
+            return doctorDTO;
         }
 
         private bool DoctorExists(int id)

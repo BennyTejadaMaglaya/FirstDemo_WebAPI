@@ -93,7 +93,7 @@ namespace FirstDemo_WebAPI.Controllers
             return patientDTO;
         }
 
-        // GET: api/PatientsByDoctor
+        // GET: api/Patient/ByDoctor
         [HttpGet("ByDoctor/{id}")]
         public async Task<ActionResult<IEnumerable<PatientDTO>>> GetPatientsByDoctor(int id)
         {
