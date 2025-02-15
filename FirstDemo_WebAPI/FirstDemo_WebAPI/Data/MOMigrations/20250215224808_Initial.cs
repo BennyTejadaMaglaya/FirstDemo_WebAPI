@@ -17,10 +17,14 @@ namespace FirstDemo_WebAPI.Data.MOMigrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    MiddleName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true)
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    MiddleName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,14 +37,18 @@ namespace FirstDemo_WebAPI.Data.MOMigrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FirstName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    MiddleName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    OHIP = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    MiddleName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    OHIP = table.Column<string>(type: "TEXT", nullable: false),
                     DOB = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ExpYrVisits = table.Column<byte>(type: "INTEGER", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: true),
-                    DoctorID = table.Column<int>(type: "INTEGER", nullable: false)
+                    RowVersion = table.Column<byte[]>(type: "BLOB", nullable: true),
+                    DoctorID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    UpdatedOn = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
