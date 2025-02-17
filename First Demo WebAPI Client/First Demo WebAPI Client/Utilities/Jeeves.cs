@@ -10,7 +10,7 @@ namespace First_Demo_WebAPI_Client.Utilities
     public static class Jeeves
     {
         //For Local API
-        public static Uri DBUri = new Uri("https://localhost:7148/");
+        public static Uri DBUri = new Uri("https://localhost:7282/");
 
         //For API on the Internet
 
