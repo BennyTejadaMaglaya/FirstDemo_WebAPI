@@ -4,7 +4,8 @@ using System.Net.Http.Headers;
 using (var client = new HttpClient())
 {
     // Prepare Client
-    client.BaseAddress = new Uri("https://localhost:7282/");
+    client.BaseAddress = new Uri("http://localhost:5168/");//http
+    //client.BaseAddress = new Uri("https://localhost:7282/");//https
     client.DefaultRequestHeaders.Accept.Clear();
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
