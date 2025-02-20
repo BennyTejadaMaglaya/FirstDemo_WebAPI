@@ -48,7 +48,7 @@ namespace First_Demo_WebAPI_Client
                 //Add the All Option
                 doctors.Insert(0, new Doctor { ID = 0, LastName = " - All Doctors" });
                 //Bind to the ComboBox
-                DoctorCombo.ItemsSource = doctors;
+                DoctorCombo.ItemsSource = doctors.OrderBy(d => d.FormalName);
                 ShowPatients(null);
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace First_Demo_WebAPI_Client
                 {
                     patients = await patientRepository.GetPatients();
                 }
-                patientList.ItemsSource = patients;
+                patientList.ItemsSource = patients.OrderBy(p => p.LastName).ThenBy(p => p.FirstName);
 
             }
             catch (Exception ex)
