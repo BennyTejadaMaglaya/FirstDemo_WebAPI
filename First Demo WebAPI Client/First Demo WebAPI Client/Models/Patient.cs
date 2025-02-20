@@ -27,12 +27,14 @@ namespace First_Demo_WebAPI_Client.Models
             {
                 if (DOB == DateTime.MinValue)
                 {
-                    return "Age: Unknown" + " - " + Doctor.Summary;
+                    return "Age: Unknown" + (string.IsNullOrEmpty(Doctor?.Summary)
+                        ? "" : " - " + Doctor?.Summary);
                 }
                 DateTime today = DateTime.Today;
                 int a = today.Year - DOB.Year
                     - (today.Month < DOB.Month || (today.Month == DOB.Month && today.Day < DOB.Day) ? 1 : 0);
-                return "Age: " + a.ToString().PadLeft(3) + " - " + Doctor.Summary;
+                return "Age: " + a.ToString().PadLeft(3) + (string.IsNullOrEmpty(Doctor?.Summary)
+                        ? "" : " - " + Doctor?.Summary);
             }
         }
 
