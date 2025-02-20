@@ -29,6 +29,14 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                <StackPanel x:Name="DoctorPanel" Grid.Row="0" Margin="12,0,12,0">
+                    <TextBlock Text="Patients By Doctor:" Margin="0,0,0,6"/>
+                    <ComboBox x:Name="DoctorCombo" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      DisplayMemberPath="FormalName"
+                      SelectionChanged="DoctorCombo_SelectionChanged"
+                      Margin="0,0,0,6" PlaceholderText=" - All Doctors" />
+                </StackPanel>
                 <GridView Name="patientList" Margin="30,0,0,0" Grid.Row="1">
                     <GridView.ItemTemplate>
                         <DataTemplate  x:DataType="models:Patient">

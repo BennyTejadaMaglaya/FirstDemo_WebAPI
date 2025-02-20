@@ -33,10 +33,43 @@ namespace First_Demo_WebAPI_Client
             InitializeComponent();
             doctorRepository = new DoctorRepository();
             patientRepository = new PatientRepository();
-            ShowPatients();
+            FillDropDown();
         }
 
-        private async void ShowPatients()
+        private async void FillDropDown()
+        {
+            //Show Progress
+            progRing.IsActive = true;
+            progRing.Visibility = Visibility.Visible;
+
+            try
+            {
+                List<Doctor> doctors = await doctorRepository.GetDoctors();
+                //Add the All Option
+                doctors.Insert(0, new Doctor { ID = 0, LastName = " - All Doctors" });
+                //Bind to the ComboBox
+                DoctorCombo.ItemsSource = doctors;
+                ShowPatients(null);
+            }
+            catch (Exception ex)
+            {
+                if (ex.GetBaseException().Message.Contains("connection with the server"))
+                {
+                    Jeeves.ShowMessage("Error", "No connection with the server.");
+                }
+                else
+                {
+                    Jeeves.ShowMessage("Error", "Could not complete operation");
+                }
+            }
+            finally
+            {
+                progRing.IsActive = false;
+                progRing.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private async void ShowPatients(int? DoctorID)
         {
             //Show Progress
             progRing.IsActive = true;
@@ -45,7 +78,14 @@ namespace First_Demo_WebAPI_Client
             try
             {
                 List<Patient> patients;
-                patients = await patientRepository.GetPatients();
+                if (DoctorID.GetValueOrDefault() > 0)
+                {
+                    patients = await patientRepository.GetPatientsByDoctor(DoctorID.GetValueOrDefault());
+                }
+                else
+                {
+                    patients = await patientRepository.GetPatients();
+                }
                 patientList.ItemsSource = patients;
 
             }
@@ -67,9 +107,15 @@ namespace First_Demo_WebAPI_Client
             }
         }
 
+        private void DoctorCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Doctor selDoc = (Doctor)DoctorCombo.SelectedItem;
+            ShowPatients(selDoc?.ID);
+        }
+
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            ShowPatients();
+            FillDropDown();
         }
     }
 }
