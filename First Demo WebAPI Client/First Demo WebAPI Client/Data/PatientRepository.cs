@@ -30,7 +30,8 @@ namespace First_Demo_WebAPI_Client.Data
             }
             else
             {
-                throw new Exception("Could not access the list of Patients.");
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
             }
         }
 
@@ -46,11 +47,12 @@ namespace First_Demo_WebAPI_Client.Data
             {
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    throw new Exception("Cannot find any Patinets for that Doctor.");
+                    throw new Exception("Cannot find any Patients for that Doctor.");
                 }
                 else
                 {
-                    throw new Exception("Could not access the list of Patients by Doctor.");
+                    var ex = Jeeves.CreateApiException(response);
+                    throw ex;
                 }
             }
         }
@@ -65,7 +67,38 @@ namespace First_Demo_WebAPI_Client.Data
             }
             else
             {
-                throw new Exception("Could not access that Patient.");
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task AddPatient(Patient patientToAdd)
+        {
+            var response = await client.PostAsJsonAsync("/api/patient", patientToAdd);
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task UpdatePatient(Patient patientToUpdate)
+        {
+            var response = await client.PutAsJsonAsync($"/api/patient/{patientToUpdate.ID}", patientToUpdate);
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task DeletePatient(Patient patientToDelete)
+        {
+            var response = await client.DeleteAsync($"/api/patient/{patientToDelete.ID}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
             }
         }
     }
