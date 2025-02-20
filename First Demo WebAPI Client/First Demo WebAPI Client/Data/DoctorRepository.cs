@@ -31,7 +31,8 @@ namespace First_Demo_WebAPI_Client.Data
             }
             else
             {
-                throw new Exception("Could not access the list of Doctors.");
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
             }
         }
         public async Task<Doctor> GetDoctor(int DoctorID)
@@ -44,7 +45,38 @@ namespace First_Demo_WebAPI_Client.Data
             }
             else
             {
-                throw new Exception("Could not access that Doctor.");
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task AddDoctor(Doctor doctorToAdd)
+        {
+            var response = await client.PostAsJsonAsync("/api/doctor", doctorToAdd);
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task UpdateDoctor(Doctor doctorToUpdate)
+        {
+            var response = await client.PutAsJsonAsync($"/api/doctor/{doctorToUpdate.ID}", doctorToUpdate);
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
+            }
+        }
+
+        public async Task DeleteDoctor(Doctor doctorToDelete)
+        {
+            var response = await client.DeleteAsync($"/api/doctor/{doctorToDelete.ID}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var ex = Jeeves.CreateApiException(response);
+                throw ex;
             }
         }
     }

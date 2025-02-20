@@ -11,5 +11,8 @@ namespace First_Demo_WebAPI_Client.Data
     {
         Task<List<Doctor>> GetDoctors();
         Task<Doctor> GetDoctor(int ID);
+        Task AddDoctor(Doctor doctorToAdd);
+        Task UpdateDoctor(Doctor doctorToUpdate);
+        Task DeleteDoctor(Doctor doctorToDelete);
     }
 }
