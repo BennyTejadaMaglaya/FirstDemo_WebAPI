@@ -37,7 +37,10 @@
                       SelectionChanged="DoctorCombo_SelectionChanged"
                       Margin="0,0,0,6" PlaceholderText=" - All Doctors" />
                 </StackPanel>
-                <GridView Name="patientList" Margin="30,0,0,0" Grid.Row="1">
+                <GridView Name="patientList" Margin="30,0,0,0"
+                          IsItemClickEnabled="True"
+                          ItemClick="patientGridView_ItemClick"
+                          Grid.Row="1">
                     <GridView.ItemTemplate>
                         <DataTemplate  x:DataType="models:Patient">
                             <StackPanel Width="300">
@@ -54,6 +57,9 @@
             <RelativePanel Grid.Row="2">
                 <Button x:Name="btnRefresh" Content="Refresh" RelativePanel.AlignLeftWithPanel="False"
                     Click="btnRefresh_Click" Margin="6,6,6,6" />
+                <Button x:Name="btnAdd" Content="Add Patient"
+                        RelativePanel.AlignHorizontalCenterWithPanel="True"
+                        Click="btnAdd_Click" Margin="6,6,6,6" />
             </RelativePanel>
         </Grid>
     </ScrollViewer>

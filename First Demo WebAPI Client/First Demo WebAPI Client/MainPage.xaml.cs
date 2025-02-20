@@ -49,7 +49,17 @@ namespace First_Demo_WebAPI_Client
                 doctors.Insert(0, new Doctor { ID = 0, LastName = " - All Doctors" });
                 //Bind to the ComboBox
                 DoctorCombo.ItemsSource = doctors.OrderBy(d => d.FormalName);
+                btnAdd.IsEnabled = true;
                 ShowPatients(null);
+            }
+            catch (ApiException apiEx)
+            {
+                string errMsg = "Errors:" + Environment.NewLine;
+                foreach (var error in apiEx.Errors)
+                {
+                    errMsg += Environment.NewLine + "-" + error;
+                }
+                Jeeves.ShowMessage("Problem filling Doctor Selection:", errMsg);
             }
             catch (Exception ex)
             {
@@ -89,6 +99,15 @@ namespace First_Demo_WebAPI_Client
                 patientList.ItemsSource = patients.OrderBy(p => p.LastName).ThenBy(p => p.FirstName);
 
             }
+            catch (ApiException apiEx)
+            {
+                string errMsg = "Errors:" + Environment.NewLine;
+                foreach (var error in apiEx.Errors)
+                {
+                    errMsg += Environment.NewLine + "-" + error;
+                }
+                Jeeves.ShowMessage("Problem accessing Patients:", errMsg);
+            }
             catch (Exception ex)
             {
                 if (ex.GetBaseException().Message.Contains("connection with the server"))
@@ -105,6 +124,21 @@ namespace First_Demo_WebAPI_Client
                 progRing.IsActive = false;
                 progRing.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void patientGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            // Navigate to the detail page
+            Frame.Navigate(typeof(PatientDetailPage), (Patient)e.ClickedItem);
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Patient newPat = new Patient();
+            newPat.DOB = DateTime.Now;
+
+            // Navigate to the detail page
+            Frame.Navigate(typeof(PatientDetailPage), newPat);
         }
 
         private void DoctorCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
